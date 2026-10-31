@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Windows 11 Setup Simulator</title>
+<style>
+:root{--blue:#0067c0;--ink:#202124;--muted:#5d6269;--line:#d9dde2}
+*{box-sizing:border-box}html,body{height:100%;margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--ink)}
+body{overflow:hidden;background:#071a36}
+.wallpaper{position:fixed;inset:0;background:radial-gradient(ellipse at 58% 50%,#1a8ee5 0,#0872cb 20%,#0750a4 42%,#061c49 78%,#030d25 100%);overflow:hidden}
+.wallpaper:before{content:"";position:absolute;width:54vw;height:54vw;max-width:760px;max-height:760px;left:50%;top:50%;transform:translate(-50%,-50%);background:conic-gradient(from 45deg at 50% 50%,transparent 0 24%,rgba(87,188,255,.32) 25%,transparent 48%,rgba(0,24,85,.24) 50%,transparent 74%,rgba(120,210,255,.25) 75%,transparent);filter:blur(32px);border-radius:50%}
+.setup{position:relative;z-index:1;height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+.panel{width:min(900px,96vw);min-height:min(600px,88vh);background:rgba(250,251,253,.97);border:1px solid rgba(255,255,255,.6);border-radius:9px;box-shadow:0 28px 90px #00122b80;display:grid;grid-template-columns:1fr 260px;overflow:hidden}
+.main{padding:46px 58px 32px;display:flex;flex-direction:column;min-height:600px}.side{background:#f2f4f7;border-left:1px solid #e3e6ea;padding:34px 25px;display:flex;flex-direction:column;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;color:#3b4047;font-size:14px;font-weight:600}.winmark{width:24px;height:24px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;transform:perspective(30px) rotateY(-8deg)}.winmark i{background:#0878d1}
+.content{margin:auto 0;max-width:610px;width:100%}h1{font-size:30px;line-height:1.25;font-weight:600;margin:0 0 13px;letter-spacing:-.5px}p{font-size:15px;line-height:1.55;color:#4e5359;margin:0 0 24px}
+.fieldlabel{font-size:14px;font-weight:600;display:block;margin:16px 0 7px}select,input{width:100%;height:42px;padding:0 12px;border:1px solid #8c9299;border-radius:4px;background:#fff;font:15px "Segoe UI";color:#222;outline:none}select:focus,input:focus{border:2px solid var(--blue)}
+.choice{border:1px solid #c8cdd3;background:#fff;border-radius:5px;padding:15px 16px;margin:10px 0;display:flex;gap:13px;align-items:flex-start;cursor:pointer}.choice:hover{border-color:#6ca9df;background:#f7fbff}.choice.selected{border:2px solid var(--blue);padding:14px 15px;background:#f4f9ff}.choice input{width:17px;height:17px;margin:2px 0 0;accent-color:var(--blue)}.choice b{font-size:15px;font-weight:600}.choice small{display:block;color:#60666d;font-size:13px;line-height:1.4;margin-top:4px}
+.actions{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:25px}.btn{border:0;border-radius:4px;padding:10px 25px;min-width:112px;font:600 14px "Segoe UI";cursor:pointer}.primary{background:var(--blue);color:white}.primary:hover{background:#005ba9}.secondary{background:#e8ebef;color:#202124}.secondary:hover{background:#dce1e7}.secondary:disabled{opacity:.35;cursor:default}
+.step{font-size:12px;color:#737980}.side h3{font-size:14px;margin:0 0 12px}.side p{font-size:12px;color:#686e75;margin:0}.progress{height:4px;background:#d9dfe5;border-radius:9px;overflow:hidden;margin:12px 0 8px}.progress span{display:block;height:100%;background:var(--blue);width:0;transition:width .3s}.sidefoot{font-size:11px;color:#737980;line-height:1.5}.globe{width:64px;height:64px;border:2px solid #9bb4ca;border-radius:50%;display:grid;place-items:center;color:#47769d;font-size:30px;margin-bottom:22px}.link{border:0;background:none;color:#0067c0;text-decoration:underline;cursor:pointer;font:13px "Segoe UI";padding:0}
+.status{font-size:13px;color:#5d6269;margin-top:16px;min-height:20px}.checkrow{display:flex;gap:10px;align-items:flex-start;margin:13px 0;font-size:14px;color:#454b51}.checkrow input{width:17px;height:17px;flex:none;accent-color:var(--blue)}
+.done{text-align:center}.done .tick{font-size:58px;color:#16834a;margin-bottom:10px}
+@media(max-width:720px){.panel{display:block;width:100%;min-height:0;max-height:94vh;overflow:auto}.main{min-height:560px;padding:28px 24px}.side{display:none}.setup{padding:10px}h1{font-size:25px}}
+</style></head>
+<body><div class="wallpaper"></div><div class="setup"><div class="panel">
+<main class="main"><div class="brand"><span class="winmark"><i></i><i></i><i></i><i></i></span> Windows 11 · Thiết lập</div>
+<section class="content" id="content"></section>
+<div class="actions"><button class="btn secondary" id="back" onclick="go(-1)">Quay lại</button><span class="step" id="step">Bước 1 / 12</span><button class="btn primary" id="next" onclick="go(1)">Tiếp theo</button></div></main>
+<aside class="side"><div><div class="globe">◎</div><h3>Thiết lập Windows</h3><p>Hoàn tất một vài bước để chuẩn bị trải nghiệm Windows trên thiết bị này.</p><div class="progress"><span id="bar"></span></div><p id="pct">0% hoàn tất</p></div><div class="sidefoot">Trình mô phỏng giao diện — không thay đổi máy tính, ổ đĩa hoặc cài đặt Windows thật.<br><br>© Giao diện mô phỏng học tập</div></aside>
+</div></div>
+<script>
+const steps=[
+{title:"Chọn ngôn ngữ",desc:"Hãy chọn ngôn ngữ sẽ được sử dụng trong Windows.",type:"select",label:"Ngôn ngữ để cài đặt",opts:["Tiếng Việt","English (United States)","English (United Kingdom)","Français","日本語"]},
+{title:"Chọn định dạng thời gian và tiền tệ",desc:"Chọn khu vực để Windows hiển thị ngày, giờ và tiền tệ phù hợp.",type:"select",label:"Định dạng thời gian và tiền tệ",opts:["Tiếng Việt (Việt Nam)","English (United States)","English (United Kingdom)"]},
+{title:"Chọn bàn phím hoặc phương thức nhập",desc:"Chọn bố cục bàn phím mà bạn muốn sử dụng.",type:"select",label:"Phương thức nhập",opts:["Vietnamese","US","United Kingdom","US-International"]},
+{title:"Bạn có muốn thêm bố cục bàn phím thứ hai?",desc:"Bạn có thể thêm bố cục khác hoặc bỏ qua bước này.",type:"choice",choices:[["Thêm bố cục","Thiết lập thêm một phương thức nhập khác."],["Bỏ qua","Tiếp tục với bố cục hiện tại."]]},
+{title:"Hãy kết nối với mạng",desc:"Kết nối mạng giúp thiết bị hoàn tất thiết lập và truy cập các dịch vụ trực tuyến.",type:"choice",choices:[["Ethernet","Đã kết nối mạng có dây (mô phỏng)."],["Wi-Fi — Home_WiFi","Mạng không dây có tín hiệu tốt."],["Tôi không có Internet","Tiếp tục trong chế độ mô phỏng ngoại tuyến."]]},
+{title:"Kiểm tra các điều khoản cấp phép",desc:"Đây là màn hình minh họa điều khoản trong quá trình thiết lập Windows.",type:"check",label:"Tôi đã đọc và đồng ý với các điều khoản mô phỏng."},
+{title:"Bạn muốn thiết lập thiết bị như thế nào?",desc:"Chọn cách sử dụng thiết bị trong trải nghiệm mô phỏng.",type:"choice",choices:[["Thiết lập cho mục đích cá nhân","Dành cho thiết bị sử dụng cá nhân."],["Thiết lập cho cơ quan hoặc trường học","Dành cho tổ chức quản lý thiết bị."]]},
+{title:"Đặt tên cho thiết bị",desc:"Tên này giúp bạn nhận biết máy tính trong mạng.",type:"input",label:"Tên thiết bị",placeholder:"Ví dụ: DESKTOP-DANG"},
+{title:"Mở khóa trải nghiệm của bạn",desc:"Tạo tên người dùng để tiếp tục thiết lập tài khoản mô phỏng.",type:"input",label:"Tên người dùng",placeholder:"Nhập tên của bạn"},
+{title:"Tạo mã PIN",desc:"Mã PIN chỉ dùng trong mô phỏng này, không được lưu hoặc gửi đi đâu.",type:"input",label:"Mã PIN (ít nhất 4 chữ số)",placeholder:"••••",inputType:"password"},
+{title:"Chọn cài đặt quyền riêng tư",desc:"Bật hoặc tắt các tùy chọn minh họa bên dưới.",type:"checks",choices:[["Vị trí","Cho phép ứng dụng sử dụng vị trí thiết bị."],["Tìm thiết bị của tôi","Minh họa tính năng tìm thiết bị."],["Dữ liệu chẩn đoán tùy chọn","Gửi dữ liệu sử dụng bổ sung (mô phỏng)."],["Nhận dạng giọng nói trực tuyến","Minh họa nhận dạng giọng nói."]]},
+{title:"Mọi thứ đã sẵn sàng!",desc:"Bạn đã hoàn tất các bước thiết lập mô phỏng Windows 11.",type:"done"}
+];
+let index=0,values={};
+function render(){
+const s=steps[index],c=document.getElementById('content');let body='';
+if(s.type==='select')body=`<label class="fieldlabel">${s.label}</label><select id="val">${s.opts.map((o,i)=>`<option ${((values[index]||s.opts[0])===o)?'selected':''}>${o}</option>`).join('')}</select>`;
+if(s.type==='choice')body=s.choices.map((x,i)=>`<div class="choice ${((values[index]||0)===i)?'selected':''}" onclick="pick(${i})"><input type="radio" name="pick" ${((values[index]||0)===i)?'checked':''}><div><b>${x[0]}</b><small>${x[1]}</small></div></div>`).join('');
+if(s.type==='check')body=`<label class="checkrow"><input id="agree" type="checkbox" ${values[index]?'checked':''}>${s.label}</label>`;
+if(s.type==='input')body=`<label class="fieldlabel">${s.label}</label><input id="val" type="${s.inputType||'text'}" placeholder="${s.placeholder||''}" value="${values[index]||''}">`;
+if(s.type==='checks')body=s.choices.map((x,i)=>`<label class="checkrow"><input type="checkbox" ${((values[index]||[]).includes(i))?'checked':''} onchange="toggleCheck(${i},this.checked)"><span><b>${x[0]}</b><br><small>${x[1]}</small></span></label>`).join('');
+if(s.type==='done')body=`<div class="done"><div class="tick">✓</div><h1>Chào mừng bạn!</h1><p>Thiết lập mô phỏng đã hoàn tất. Đây là màn hình kết thúc trải nghiệm, không phải Windows thật.</p><button class="btn primary" onclick="restart()">Bắt đầu lại</button></div>`;
+c.innerHTML=`<h1>${s.title}</h1><p>${s.desc}</p>${body}<div class="status" id="status"></div>`;
+document.getElementById('step').textContent=`Bước ${index+1} / ${steps.length}`;
+document.getElementById('bar').style.width=((index+1)/steps.length*100)+'%';
+document.getElementById('pct').textContent=Math.round((index+1)/steps.length*100)+'% hoàn tất';
+document.getElementById('back').disabled=index===0;
+document.getElementById('next').style.display=s.type==='done'?'none':'inline-block';
+}
+function pick(i){values[index]=i;render()}
+function toggleCheck(i,on){let a=values[index]||[];values[index]=on?[...new Set([...a,i])]:a.filter(x=>x!==i)}
+function go(dir){
+const s=steps[index];let el=document.getElementById('val');
+if(dir>0){
+if(s.type==='select')values[index]=el.value;
+if(s.type==='input'){let v=el.value.trim();if(!v){document.getElementById('status').textContent='Vui lòng nhập thông tin để tiếp tục.';el.focus();return}if(index===9&&!/^\d{4,}$/.test(v)){document.getElementById('status').textContent='Mã PIN mô phỏng cần ít nhất 4 chữ số.';return}values[index]=v}
+if(s.type==='check'&&!document.getElementById('agree').checked){document.getElementById('status').textContent='Hãy đánh dấu đồng ý để tiếp tục.';return}
+}
+index=Math.max(0,Math.min(steps.length-1,index+dir));render();
+}
+function restart(){index=0;values={};render()}
+render();
+</script></body></html>
